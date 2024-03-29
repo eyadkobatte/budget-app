@@ -1,31 +1,28 @@
 {
-  "name": "budget-app",
+  "name": "ui",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "projectType": "application",
   "prefix": "app",
-  "sourceRoot": "apps/budget-app/src",
+  "sourceRoot": "apps/ui/src",
   "tags": [],
   "targets": {
     "build": {
       "executor": "@angular-devkit/build-angular:application",
       "outputs": ["{options.outputPath}"],
       "options": {
-        "outputPath": "dist/apps/budget-app",
-        "index": "apps/budget-app/src/index.html",
-        "browser": "apps/budget-app/src/main.ts",
+        "outputPath": "dist/apps/ui",
+        "index": "apps/ui/src/index.html",
+        "browser": "apps/ui/src/main.ts",
         "polyfills": ["zone.js"],
-        "tsConfig": "apps/budget-app/tsconfig.app.json",
+        "tsConfig": "apps/ui/tsconfig.app.json",
         "inlineStyleLanguage": "scss",
-        "assets": [
-          "apps/budget-app/src/favicon.ico",
-          "apps/budget-app/src/assets"
-        ],
-        "styles": ["apps/budget-app/src/styles.scss"],
+        "assets": ["apps/ui/src/favicon.ico", "apps/ui/src/assets"],
+        "styles": ["apps/ui/src/styles.scss"],
         "scripts": [],
-        "server": "apps/budget-app/src/main.server.ts",
+        "server": "apps/ui/src/main.server.ts",
         "prerender": true,
         "ssr": {
-          "entry": "apps/budget-app/server.ts"
+          "entry": "apps/ui/server.ts"
         }
       },
       "configurations": {
@@ -56,10 +53,10 @@
       "executor": "@angular-devkit/build-angular:dev-server",
       "configurations": {
         "production": {
-          "buildTarget": "budget-app:build:production"
+          "buildTarget": "ui:build:production"
         },
         "development": {
-          "buildTarget": "budget-app:build:development"
+          "buildTarget": "ui:build:development"
         }
       },
       "defaultConfiguration": "development"
@@ -67,7 +64,7 @@
     "extract-i18n": {
       "executor": "@angular-devkit/build-angular:extract-i18n",
       "options": {
-        "buildTarget": "budget-app:build"
+        "buildTarget": "ui:build"
       }
     },
     "lint": {
@@ -77,7 +74,7 @@
       "executor": "@nx/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
       "options": {
-        "jestConfig": "apps/budget-app/jest.config.ts"
+        "jestConfig": "apps/ui/jest.config.ts"
       }
     }
   }

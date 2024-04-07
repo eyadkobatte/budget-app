@@ -1,0 +1,41 @@
+<div class="stats stats-vertical w-full lg:w-auto lg:stats-horizontal shadow">
+  <div class="stat place-items-center">
+    <div class="stat-title">Income</div>
+    <div class="stat-value">£3,800</div>
+  </div>
+  <div class="stat place-items-center">
+    <div class="stat-title">Budgeted</div>
+    <div class="stat-value">£2,130</div>
+  </div>
+  <div class="stat place-items-center">
+    <div class="stat-title">Left</div>
+    <div class="stat-value">£1,500</div>
+  </div>
+</div>
+
+<div class="overflow-x-auto h-[32rem] shadow-inner">
+  <table class="table table-pin-rows">
+    <thead>
+      <tr>
+        <th class="bg-neutral text-neutral-content">Category</th>
+        <th class="bg-neutral text-neutral-content">Assigned</th>
+      </tr>
+    </thead>
+    @for (categoryGroup of categories; track categoryGroup.name) {
+    <thead>
+      <tr>
+        <th>{{ categoryGroup.name }}</th>
+        <td>{{ categoryGroup.total }}</td>
+      </tr>
+    </thead>
+    <tbody>
+      @for (category of categoryGroup.categories; track category.name) {
+      <tr>
+        <td>{{ category.name }}</td>
+        <td>{{ category.assigned }}</td>
+      </tr>
+      }
+    </tbody>
+    }
+  </table>
+</div>

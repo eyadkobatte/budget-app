@@ -11,7 +11,9 @@
     "lib": ["es2020", "dom"],
     "module": "esnext",
     "moduleResolution": "node",
-    "paths": {},
+    "paths": {
+      "@entities/*": ["libs/entities/src/*"]
+    },
     "rootDir": ".",
     "skipDefaultLibCheck": true,
     "skipLibCheck": true,

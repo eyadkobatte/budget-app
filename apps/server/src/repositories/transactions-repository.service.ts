@@ -19,7 +19,7 @@ export class TransactionsRepositoryService {
           date: { $gt: fromDate },
         },
         {},
-        { limit: 500 }
+        { limit: 500, sort: { date: -1 } }
       )
       .lean();
     const requisitions =
@@ -30,6 +30,43 @@ export class TransactionsRepositoryService {
       ).name;
       return { ...transaction, accountId: accountName };
     });
+  }
+
+  async getTransactionGroupedByCategory(fromDate: Date) {
+    return this.transactionsRepository.aggregate<{
+      category: string;
+      amount: number;
+    }>([
+      {
+        $match: {
+          date: {
+            $gt: fromDate,
+          },
+        },
+      },
+      {
+        $group: {
+          _id: '$category',
+          amount: {
+            $sum: '$amount',
+          },
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          category: '$_id',
+          amount: '$amount',
+        },
+      },
+    ]);
+  }
+
+  async categorizeTransaction(transactionId: string, category: string) {
+    return this.transactionsRepository.updateOne(
+      { id: transactionId },
+      { category }
+    );
   }
 
   async upsertTransactions(transactions: Transaction[]) {

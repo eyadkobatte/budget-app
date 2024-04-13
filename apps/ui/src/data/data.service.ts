@@ -11,7 +11,13 @@ import { BehaviorSubject, Observable, map, tap } from 'rxjs';
 })
 export class DataService {
   public categoryGroups$ = new BehaviorSubject<CategoryGroup[]>([]);
-  constructor(private http: HttpClient) {}
+
+  public startDate$: BehaviorSubject<Date>;
+
+  constructor(private http: HttpClient) {
+    const startOfMonth = DateTime.now().startOf('month');
+    this.startDate$ = new BehaviorSubject(startOfMonth.toJSDate());
+  }
 
   getRequisitions(): Observable<Requisition[]> {
     return this.http
@@ -26,12 +32,12 @@ export class DataService {
       );
   }
 
-  getTransactions(): Observable<Transaction[]> {
+  getTransactions(fromDate: Date): Observable<Transaction[]> {
     return this.http.get<Transaction[]>(
       'http://localhost:3000/api/v1/transactions',
       {
         params: {
-          fromDate: '2024-01-01T00:00:00.000Z',
+          fromDate: fromDate.toISOString(),
         },
       }
     );
@@ -40,6 +46,28 @@ export class DataService {
   getCategories(): Observable<CategoryGroup[]> {
     return this.http
       .get<CategoryGroup[]>('http://localhost:3000/api/v1/categories')
-      .pipe(tap((categoryGroups) => this.categoryGroups$.next(categoryGroups)));
+      .pipe(
+        tap((categoryGroups) => {
+          this.categoryGroups$.next(categoryGroups);
+        })
+      );
+  }
+
+  getBudgetOverview(fromDate: Date) {
+    return this.http.get('http://localhost:3000/api/v1/budget/overview', {
+      params: {
+        fromDate: fromDate.toISOString(),
+      },
+    });
+  }
+
+  categorizeTransaction(transactionId: string, category: string) {
+    return this.http.put(
+      `http://localhost:3000/api/v1/transactions/categorize/`,
+      {
+        transactionId,
+        category,
+      }
+    );
   }
 }

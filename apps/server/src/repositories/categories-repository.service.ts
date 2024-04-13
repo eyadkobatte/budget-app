@@ -10,6 +10,26 @@ export class CategoriesRepositoryService {
     private categoryGroupModel: Model<CategoryGroup>
   ) {}
 
+  async getCategoriesForBudget() {
+    return this.categoryGroupModel.aggregate([
+      {
+        $unwind: {
+          path: '$categories',
+        },
+      },
+      {
+        $project: {
+          name: 'name',
+          category: {
+            $concat: ['$name', '::', '$categories.name'],
+          },
+          budget: '$categories.assigned',
+          categories: -1,
+        },
+      },
+    ]);
+  }
+
   async getAllCategories() {
     return this.categoryGroupModel.find().lean();
   }

@@ -6,6 +6,7 @@ import { requisitionsResolver } from '../accounts/requisitions.resolver';
 import { TransactionsListComponent } from '../transactions-list/transactions-list.component';
 import { transactionsResolver } from '../transactions-list/transactions.resolver';
 import { categoriesResolver } from '../budget/categories.resolver';
+import { budgetResolver } from '../budget/budget.resolver';
 
 export const appRoutes: Route[] = [
   {
@@ -17,6 +18,7 @@ export const appRoutes: Route[] = [
     path: 'budget',
     component: BudgetComponent,
     resolve: {
+      budget: budgetResolver,
       categories: categoriesResolver,
     },
   },

@@ -1,0 +1,26 @@
+<div class="dropdown">
+  <input
+    type="text"
+    class="input input-ghost input-xs w-full max-w-xs"
+    autocomplete="off"
+    [(ngModel)]="selectedOption"
+    (ngModelChange)="onSearch($event)"
+  />
+  <div
+    tabindex="0"
+    class="dropdown-content dropdown-end z-[1] menu shadow bg-base-100 rounded-box w-52"
+  >
+    @for (group of optionsToShow$ | async ; track $index) {
+    <div class="py-2 font-light text-primary-content bg-primary">
+      {{ group.name }}
+    </div>
+    @for (option of group.options; track option; let optionIndex = $index) {
+    <li
+      (click)="selectOption(group.name, option)"
+      class="ps-2 py-1 cursor-pointer hover:bg-secondary hover:text-secondary-content"
+    >
+      {{ option }}
+    </li>
+    } }
+  </div>
+</div>

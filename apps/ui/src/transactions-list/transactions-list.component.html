@@ -1,4 +1,5 @@
-<div class="overflow-x-auto">
+<div class="overflow-x-auto lg:px-6">
+  <h1 class="text-xl my-4">Transactions</h1>
   <table class="table table-xs">
     <thead>
       <tr>
@@ -16,7 +17,13 @@
         <td>{{ transaction.date | date : 'mediumDate' }}</td>
         <td>{{ transaction.accountId }}</td>
         <td>{{ transaction.payee }}</td>
-        <td>Uncategorised</td>
+        <td>
+          <app-component-autocomplete
+            [value]="transaction.category || ''"
+            [options]="categoryGroupsForAutocomplete"
+            (optionSelected)="categorySelected(transaction.id, $event)"
+          ></app-component-autocomplete>
+        </td>
         <td>{{ transaction.amount }}</td>
         <td>{{ transaction.cleared }}</td>
       </tr>

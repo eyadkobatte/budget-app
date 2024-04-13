@@ -4,7 +4,7 @@ import { ResolveFn } from '@angular/router';
 import { categoriesResolver } from './categories.resolver';
 import { CategoryGroup } from '@entities/category';
 
-describe('transactionsResolver', () => {
+describe('categoriesResolver', () => {
   const executeResolver: ResolveFn<CategoryGroup[]> = (...resolverParameters) =>
     TestBed.runInInjectionContext(() =>
       categoriesResolver(...resolverParameters)

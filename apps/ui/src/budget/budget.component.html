@@ -13,12 +13,13 @@
   </div>
 </div>
 
-<div class="overflow-x-auto h-[32rem] shadow-inner">
-  <table class="table table-pin-rows">
+<div class="overflow-x-auto">
+  <table class="table table-zebra">
     <thead>
       <tr>
         <th class="bg-neutral text-neutral-content">Category</th>
         <th class="bg-neutral text-neutral-content">Assigned</th>
+        <th class="bg-neutral text-neutral-content">Actuals</th>
       </tr>
     </thead>
     @for (categoryGroup of categories; track categoryGroup.name) {
@@ -26,6 +27,7 @@
       <tr>
         <th>{{ categoryGroup.name }}</th>
         <td>{{ categoryGroup.total }}</td>
+        <td>{{ categoryGroup.left }}</td>
       </tr>
     </thead>
     <tbody>
@@ -33,6 +35,7 @@
       <tr>
         <td>{{ category.name }}</td>
         <td>{{ category.assigned }}</td>
+        <td>{{ category.left }}</td>
       </tr>
       }
     </tbody>

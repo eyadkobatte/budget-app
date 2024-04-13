@@ -59,8 +59,8 @@ export class GocardlessService {
     await this.client.generateToken();
     const transactions = await this.client.account(accountId).getTransactions({
       country: 'GB',
-      dateFrom: '2024-01-01',
-      dateTo: '2024-04-04',
+      dateFrom: '2024-03-01',
+      dateTo: '2024-04-09',
     });
     return transactions;
   }

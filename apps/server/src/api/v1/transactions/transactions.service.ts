@@ -12,4 +12,11 @@ export class TransactionsService {
       new Date(fromDate)
     );
   }
+
+  categorizeTransaction(transactionId: string, category: string) {
+    return this.transactionsRepositoryService.categorizeTransaction(
+      transactionId,
+      category
+    );
+  }
 }

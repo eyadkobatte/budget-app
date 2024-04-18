@@ -5,16 +5,14 @@ import { Subject, takeUntil } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 import { DataService } from '../data/data.service';
 import { CategoryGroup } from '@entities/category';
-import {
-  AutocompleteComponent,
-  AutocompleteInput,
-  AutocompleteOutput,
-} from '../components/autocomplete/autocomplete.component';
+import { AutocompleteComponent } from '../components/autocomplete/autocomplete.component';
+import { TableModule } from 'primeng/table';
+import { SelectItemGroup } from 'primeng/api';
 
 @Component({
   selector: 'app-transactions-list',
   standalone: true,
-  imports: [CommonModule, AutocompleteComponent],
+  imports: [CommonModule, AutocompleteComponent, TableModule],
   templateUrl: './transactions-list.component.html',
   styleUrl: './transactions-list.component.scss',
 })
@@ -22,8 +20,10 @@ export class TransactionsListComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
 
   categoryGroups: CategoryGroup[] = [];
-  categoryGroupsForAutocomplete: AutocompleteInput = [];
+  categoryGroupsForAutocomplete: SelectItemGroup[] = [];
+
   transactions: Transaction[] = [];
+
   constructor(
     private activatedRoute: ActivatedRoute,
     private dataService: DataService
@@ -44,11 +44,12 @@ export class TransactionsListComponent implements OnInit, OnDestroy {
         this.categoryGroupsForAutocomplete = this.categoryGroups.map(
           (categoryGroup) =>
             ({
-              name: categoryGroup.name,
-              options: categoryGroup.categories.map(
-                (category) => category.name
-              ),
-            } as AutocompleteInput[number])
+              label: categoryGroup.name,
+              items: categoryGroup.categories.map((category) => ({
+                label: category.name,
+                value: category.name,
+              })),
+            } as SelectItemGroup)
         );
       });
   }
@@ -58,16 +59,14 @@ export class TransactionsListComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
-  categorySelected(transactionId: string, option: AutocompleteOutput) {
-    this.dataService
-      .categorizeTransaction(transactionId, option.option)
-      .subscribe({
-        next: (value) => {
-          console.log(value);
-        },
-        error: (error) => {
-          console.log(error);
-        },
-      });
+  categorySelected(transactionId: string, category: string) {
+    this.dataService.categorizeTransaction(transactionId, category).subscribe({
+      next: (value) => {
+        console.log(value);
+      },
+      error: (error) => {
+        console.log(error);
+      },
+    });
   }
 }

@@ -1,43 +1,36 @@
-<div class="overflow-x-auto lg:px-6">
+<div class="header-row">
   <h1 class="text-xl my-4">Transactions</h1>
-  <table class="table table-xs">
-    <thead>
-      <tr>
-        <th>Date</th>
-        <th>Account</th>
-        <th>Payee</th>
-        <th>Category</th>
-        <th>Amount</th>
-        <th>✓</th>
-      </tr>
-    </thead>
-    <tbody>
-      @for (transaction of transactions; track $index) {
-      <tr>
-        <td>{{ transaction.date | date : 'mediumDate' }}</td>
-        <td>{{ transaction.accountId }}</td>
-        <td>{{ transaction.payee }}</td>
-        <td>
-          <app-component-autocomplete
-            [value]="transaction.category || ''"
-            [options]="categoryGroupsForAutocomplete"
-            (optionSelected)="categorySelected(transaction.id, $event)"
-          ></app-component-autocomplete>
-        </td>
-        <td>{{ transaction.amount }}</td>
-        <td>{{ transaction.cleared }}</td>
-      </tr>
-      }
-    </tbody>
-    <tfoot>
-      <tr>
-        <th>Date</th>
-        <th>Account</th>
-        <th>Payee</th>
-        <th>Category</th>
-        <th>Amount</th>
-        <th>✓</th>
-      </tr>
-    </tfoot>
-  </table>
 </div>
+<p-table
+  styleClass="p-datatable-sm p-datatable-striped"
+  [value]="transactions"
+  [tableStyle]="{ 'min-width': '50rem' }"
+>
+  <ng-template pTemplate="header">
+    <tr>
+      <th>Date</th>
+      <th>Account</th>
+      <th>Payee</th>
+      <th>Category</th>
+      <th>Amount</th>
+      <th>✓</th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-transaction>
+    <tr>
+      <td>{{ transaction.date | date : 'mediumDate' }}</td>
+      <td>{{ transaction.accountId }}</td>
+      <td>{{ transaction.payee }}</td>
+      <td>
+        <app-component-autocomplete
+          [options]="categoryGroupsForAutocomplete"
+          [selectedOption]="transaction.category"
+          (itemSelection)="categorySelected(transaction.id, $event)"
+        ></app-component-autocomplete>
+      </td>
+      <td>{{ transaction.amount }}</td>
+      <td>{{ transaction.cleared }}</td>
+    </tr>
+  </ng-template>
+</p-table>
+<!-- </div> -->

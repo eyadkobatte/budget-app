@@ -3,97 +3,68 @@ import {
   EventEmitter,
   Input,
   OnDestroy,
-  OnInit,
   Output,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Subject } from 'rxjs';
 import { FormsModule } from '@angular/forms';
+import { FilterService, SelectItem, SelectItemGroup } from 'primeng/api';
+
 import {
-  Observable,
-  Subject,
-  debounceTime,
-  distinctUntilChanged,
-  from,
-  map,
-  startWith,
-} from 'rxjs';
-
-type AutocompleteOption = {
-  name: string;
-  options: string[];
-};
-
-export type AutocompleteInput = AutocompleteOption[];
-
-export type AutocompleteOutput = {
-  group: string;
-  option: string;
-};
+  AutoCompleteModule,
+  AutoCompleteSelectEvent,
+  AutoCompleteCompleteEvent,
+} from 'primeng/autocomplete';
 
 @Component({
   selector: 'app-component-autocomplete',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, AutoCompleteModule],
   templateUrl: './autocomplete.component.html',
   styleUrl: './autocomplete.component.scss',
 })
-export class AutocompleteComponent implements OnInit, OnDestroy {
+export class AutocompleteComponent implements OnDestroy {
   private destroy$ = new Subject<void>();
 
-  @Input() value = '';
-  @Input() options: AutocompleteInput = [];
-  @Output() optionSelected = new EventEmitter<AutocompleteOutput>();
+  @Input() options: SelectItemGroup[] = [];
+  filteredGroups: SelectItemGroup[] = [];
 
-  optionsToShow$: Observable<AutocompleteInput> = from([]);
-  selectedOption = '';
-  searchTerm$ = new Subject<string>();
+  @Input() selectedOption: SelectItem | undefined;
 
-  ngOnInit(): void {
-    this.selectedOption = this.value;
-    this.optionsToShow$ = this.searchTerm$.pipe(
-      startWith(''),
-      debounceTime(200),
-      distinctUntilChanged(),
-      map((term) => {
-        return this.filterOptions(term);
-      })
-    );
-  }
+  @Output() itemSelection = new EventEmitter<string>();
+
+  constructor(private filterService: FilterService) {}
 
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
   }
 
-  selectOption(selectedGroup: string, selectedOption: string) {
-    this.selectedOption = selectedOption;
-    this.optionSelected.next({ group: selectedGroup, option: selectedOption });
-  }
+  filterGroupedCity(event: AutoCompleteCompleteEvent) {
+    const query = event.query;
+    const filteredGroups = [];
 
-  onSearch(value: string) {
-    this.searchTerm$.next(value);
-  }
-
-  filterOptions(searchTerm: string): AutocompleteInput {
-    if (searchTerm === '') {
-      return this.options;
-    }
-    return this.options
-      .map((group) => {
-        if (group.name.toLowerCase().search(searchTerm.toLowerCase()) >= 0) {
-          return group;
-        }
-        const options = group.options.filter((option) => {
-          if (option.toLowerCase().includes(searchTerm.toLowerCase())) {
-            return true;
-          }
-          return false;
+    for (const optgroup of this.options) {
+      const filteredSubOptions = this.filterService.filter(
+        optgroup.items,
+        ['label'],
+        query,
+        'contains'
+      );
+      if (filteredSubOptions && filteredSubOptions.length) {
+        filteredGroups.push({
+          label: optgroup.label,
+          value: optgroup.value,
+          items: filteredSubOptions,
         });
-        return {
-          ...group,
-          options,
-        };
-      })
-      .filter((group) => group.options.length > 0);
+      }
+    }
+
+    this.filteredGroups = filteredGroups;
+  }
+
+  itemSelected(event: AutoCompleteSelectEvent) {
+    const item: SelectItem = event.value;
+    this.itemSelection.next(item.value);
   }
 }

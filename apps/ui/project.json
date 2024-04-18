@@ -23,7 +23,7 @@
         ],
         "scripts": [],
         "server": "apps/ui/src/main.server.ts",
-        "prerender": true,
+        "prerender": false,
         "ssr": {
           "entry": "apps/ui/server.ts"
         }
@@ -34,7 +34,7 @@
             {
               "type": "initial",
               "maximumWarning": "500kb",
-              "maximumError": "1mb"
+              "maximumError": "2mb"
             },
             {
               "type": "anyComponentStyle",

@@ -14,6 +14,9 @@ export class DataService {
 
   public startDate$: BehaviorSubject<Date>;
 
+  baseUrl =
+    'http://budget-server-env-1.eba-zmpq3rah.eu-west-2.elasticbeanstalk.com/';
+
   constructor(private http: HttpClient) {
     const startOfMonth = DateTime.now().startOf('month');
     this.startDate$ = new BehaviorSubject(startOfMonth.toJSDate());
@@ -21,7 +24,7 @@ export class DataService {
 
   getRequisitions(): Observable<Requisition[]> {
     return this.http
-      .get<Requisition[]>('http://localhost:3000/api/v1/requisitions')
+      .get<Requisition[]>(`${this.baseUrl}/api/v1/requisitions`)
       .pipe(
         map((requisitions) =>
           requisitions.map((requisition) => ({
@@ -33,19 +36,16 @@ export class DataService {
   }
 
   getTransactions(fromDate: Date): Observable<Transaction[]> {
-    return this.http.get<Transaction[]>(
-      'http://localhost:3000/api/v1/transactions',
-      {
-        params: {
-          fromDate: fromDate.toISOString(),
-        },
-      }
-    );
+    return this.http.get<Transaction[]>(`${this.baseUrl}/api/v1/transactions`, {
+      params: {
+        fromDate: fromDate.toISOString(),
+      },
+    });
   }
 
   getCategories(): Observable<CategoryGroup[]> {
     return this.http
-      .get<CategoryGroup[]>('http://localhost:3000/api/v1/categories')
+      .get<CategoryGroup[]>(`${this.baseUrl}/api/v1/categories`)
       .pipe(
         tap((categoryGroups) => {
           this.categoryGroups$.next(categoryGroups);
@@ -54,7 +54,7 @@ export class DataService {
   }
 
   getBudgetOverview(fromDate: Date) {
-    return this.http.get('http://localhost:3000/api/v1/budget/overview', {
+    return this.http.get(`${this.baseUrl}/api/v1/budget/overview`, {
       params: {
         fromDate: fromDate.toISOString(),
       },

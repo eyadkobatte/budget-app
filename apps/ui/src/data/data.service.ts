@@ -15,7 +15,7 @@ export class DataService {
   public startDate$: BehaviorSubject<Date>;
 
   baseUrl =
-    'http://budget-server-env-1.eba-zmpq3rah.eu-west-2.elasticbeanstalk.com/';
+    'http://budget-server-env-1.eba-zmpq3rah.eu-west-2.elasticbeanstalk.com';
 
   constructor(private http: HttpClient) {
     const startOfMonth = DateTime.now().startOf('month');

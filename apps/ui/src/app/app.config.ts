@@ -10,7 +10,6 @@ import {
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
 import { getAuth, provideAuth } from '@angular/fire/auth';
-import { connectAuthEmulator } from '@firebase/auth';
 import { addJwtInterceptor } from '../shared/interceptors/add-jwt/add-jwt.interceptor';
 
 export const appConfig: ApplicationConfig = {
@@ -31,14 +30,6 @@ export const appConfig: ApplicationConfig = {
         })
       )
     ),
-    importProvidersFrom(
-      provideAuth(() => {
-        const auth = getAuth();
-        connectAuthEmulator(auth, 'http://localhost:9099', {
-          disableWarnings: true,
-        });
-        return auth;
-      })
-    ),
+    importProvidersFrom(provideAuth(() => getAuth())),
   ],
 };

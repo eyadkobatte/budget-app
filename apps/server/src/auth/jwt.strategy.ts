@@ -31,7 +31,7 @@ export class JwtStrategyService extends PassportStrategy(Strategy) {
         jwksUri: authConfiguration.jwksUri,
       }),
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-      algorithms: ['none'],
+      algorithms: ['RS256'],
     } as StrategyOptionsWithoutRequest);
   }
 

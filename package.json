@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
-    "build:digitalocean": "npm install --production=false && nx build ui"
+    "build:digitalocean": "npm install --production=false && nx build server"
   },
   "private": true,
   "dependencies": {

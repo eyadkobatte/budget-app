@@ -5,6 +5,7 @@ import { Requisition } from '@entities/requisition';
 import { Transaction } from '@entities/transaction';
 import { DateTime } from 'luxon';
 import { BehaviorSubject, Observable, map, tap } from 'rxjs';
+import { environment } from '../environments/environment.local';
 
 @Injectable({
   providedIn: 'root',
@@ -14,7 +15,7 @@ export class DataService {
 
   public startDate$: BehaviorSubject<Date>;
 
-  baseUrl = 'https://budget-server-hx7p2.ondigitalocean.app';
+  baseUrl = environment.bffUrl;
 
   constructor(private http: HttpClient) {
     const startOfMonth = DateTime.now().startOf('month');

@@ -1,6 +1,14 @@
 <div class="flex flex-col">
   <div class="navbar bg-base-100">
     <a routerLink="/" class="btn btn-ghost text-xl">Budget App</a>
+    <div class="grow"></div>
+    <div *ngIf="user$ | async as user; else loginContainer">
+      <span>{{ user.displayName }}</span>
+      <a (click)="logout()" class="btn btn-ghost">Log out</a>
+    </div>
+    <ng-template #loginContainer>
+      <a (click)="login()" class="btn btn-ghost">Login</a>
+    </ng-template>
   </div>
   <div class="mb-16">
     <router-outlet></router-outlet>
@@ -8,7 +16,7 @@
   <div class="btm-nav">
     <button
       class="cursor-pointer"
-      routerLink="/budget"
+      [routerLink]="['home', 'budget']"
       routerLinkActive="active"
     >
       <svg
@@ -25,7 +33,7 @@
     </button>
     <button
       class="cursor-pointer"
-      routerLink="/accounts"
+      [routerLink]="['home', 'accounts']"
       routerLinkActive="active"
     >
       <svg
@@ -44,7 +52,7 @@
     </button>
     <button
       class="cursor-pointer"
-      routerLink="/transactions"
+      [routerLink]="['home', 'transactions']"
       routerLinkActive="active"
     >
       <svg

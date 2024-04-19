@@ -9,12 +9,14 @@ import goCardlessConfig from '../configuration/go-cardless.config';
 import databaseConfig from '../configuration/database.config';
 import { AccountSyncModule } from '../account-sync/account-sync.module';
 import { ApiV1Module } from '../api/v1/v1.module';
+import authConfig from '../configuration/auth.config';
+import { AuthModule } from '../auth/auth.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      load: [databaseConfig, goCardlessConfig],
+      load: [databaseConfig, goCardlessConfig, authConfig],
     }),
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
@@ -26,6 +28,7 @@ import { ApiV1Module } from '../api/v1/v1.module';
     ClientsModule,
     AccountSyncModule,
     ApiV1Module,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],

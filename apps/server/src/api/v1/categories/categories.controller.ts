@@ -1,8 +1,10 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
 import { CategoriesService } from './categories.service';
 import { CreateCategoryDto } from './categories.dto';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('api/v1/categories')
+@UseGuards(AuthGuard('jwt'))
 export class CategoriesController {
   constructor(private readonly categoriesService: CategoriesService) {}
 

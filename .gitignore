@@ -42,3 +42,8 @@ Thumbs.db
 .angular
 .env
 .vercel
+
+# Firebase
+.firebase
+*-debug.log
+.runtimeconfig.json

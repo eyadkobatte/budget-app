@@ -12,6 +12,7 @@ import { NavigationContainerComponent } from '../navigation-container/navigation
 })
 export class AppComponent {
   constructor(private bankConnectionService: BankConnectionService) {}
+
   connectBank() {
     this.bankConnectionService.setupAccount().subscribe({
       next: (data) => {

@@ -2,5 +2,5 @@ import { registerAs } from '@nestjs/config';
 
 export default registerAs('Auth', () => ({
   jwksUri:
-    'https://www.googleapis.com/robot/v1/metadata/x509/securetoken@system.gserviceaccount.com',
+    'https://www.googleapis.com/service_accounts/v1/jwk/securetoken@system.gserviceaccount.com',
 }));

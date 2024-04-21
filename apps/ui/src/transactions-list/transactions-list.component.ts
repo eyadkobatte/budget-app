@@ -41,15 +41,22 @@ export class TransactionsListComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe((categoryGroups) => {
         this.categoryGroups = categoryGroups;
-        this.categoryGroupsForAutocomplete = this.categoryGroups.map(
-          (categoryGroup) =>
-            ({
-              label: categoryGroup.name,
-              items: categoryGroup.categories.map((category) => ({
-                label: category.name,
-                value: category.name,
-              })),
-            } as SelectItemGroup)
+        this.categoryGroupsForAutocomplete = [
+          {
+            label: 'Transfers',
+            items: [{ label: 'Mark as Transfer', value: 'Mark as Transfer' }],
+          } as SelectItemGroup,
+        ].concat(
+          ...this.categoryGroups.map(
+            (categoryGroup) =>
+              ({
+                label: categoryGroup.name,
+                items: categoryGroup.categories.map((category) => ({
+                  label: category.name,
+                  value: category.name,
+                })),
+              } as SelectItemGroup)
+          )
         );
       });
   }
@@ -59,14 +66,27 @@ export class TransactionsListComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
+  findTransactionPair(transactionId: string) {
+    const otherTransactionId = this.transactions.find(
+      (transaction) => transaction.id === transactionId
+    );
+    return otherTransactionId;
+  }
+
   categorySelected(transactionId: string, category: string) {
-    this.dataService.categorizeTransaction(transactionId, category).subscribe({
-      next: (value) => {
-        console.log(value);
-      },
-      error: (error) => {
-        console.log(error);
-      },
-    });
+    if (category === 'Mark as Transfer') {
+      this.findTransactionPair(transactionId);
+    } else {
+      this.dataService
+        .categorizeTransaction(transactionId, category)
+        .subscribe({
+          next: (value) => {
+            console.log(value);
+          },
+          error: (error) => {
+            console.log(error);
+          },
+        });
+    }
   }
 }

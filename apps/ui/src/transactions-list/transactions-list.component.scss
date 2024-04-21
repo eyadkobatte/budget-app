@@ -1,3 +1,14 @@
 :host {
   display: block;
 }
+
+p-table.table {
+  & ::ng-deep div.p-datatable-wrapper {
+    overflow: unset;
+  }
+  & ::ng-deep thead {
+    position: sticky;
+    z-index: 2;
+    top: 0;
+  }
+}

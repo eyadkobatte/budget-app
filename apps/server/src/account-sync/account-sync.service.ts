@@ -10,9 +10,7 @@ export class AccountSyncService {
     private goCardlessService: GocardlessService,
     private transactionsRepository: TransactionsRepositoryService,
     private requisitionsRepository: RequisitionsRepositoryService
-  ) {
-    // this.syncAllAccounts();
-  }
+  ) {}
 
   async syncAllAccounts() {
     const requisitions = await this.requisitionsRepository.getAllRequisitions();
@@ -29,6 +27,10 @@ export class AccountSyncService {
       transactionsResponse,
       accountId
     );
+    console.log({
+      message: 'Syncing Account',
+      count: formattedTransactions.length,
+    });
     await this.transactionsRepository.upsertTransactions(formattedTransactions);
   }
 }

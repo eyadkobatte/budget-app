@@ -6,6 +6,7 @@ import { ActivatedRoute } from '@angular/router';
 
 type CategoryGroupRender = CategoryGroup & {
   total: number;
+  spent: number;
   left: number;
 };
 
@@ -24,19 +25,18 @@ export class BudgetComponent implements OnDestroy {
   constructor(private activatedRoute: ActivatedRoute) {
     this.activatedRoute.data.pipe(takeUntil(this.destroy$)).subscribe({
       next: (data) => {
-        const categoryGroups: CategoryGroup[] = data['budget'];
+        const categoryGroups: (CategoryGroup & {
+          assigned: number;
+          spent: number;
+          left: number;
+        })[] = data['budget'];
         this.categories = categoryGroups.map((categoryGroup) => {
           return {
             name: categoryGroup.name,
             categories: categoryGroup.categories,
-            total: categoryGroup.categories.reduce(
-              (acc, curr) => acc + curr.assigned,
-              0
-            ),
-            left: categoryGroup.categories.reduce(
-              (acc, curr) => acc + (curr.left || 0),
-              0
-            ),
+            total: categoryGroup.assigned,
+            spent: categoryGroup.spent,
+            left: categoryGroup.left,
           } as CategoryGroupRender;
         });
       },

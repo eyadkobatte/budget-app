@@ -29,7 +29,7 @@ export class AutocompleteComponent implements OnDestroy {
   @Input() options: SelectItemGroup[] = [];
   filteredGroups: SelectItemGroup[] = [];
 
-  @Input() selectedOption: SelectItem | undefined;
+  @Input() selectedOption?: string | undefined;
 
   @Output() itemSelection = new EventEmitter<string>();
 

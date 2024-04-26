@@ -62,25 +62,28 @@ export class TransactionsRepositoryService {
     ]);
   }
 
-  async categorizeTransaction(transactionId: string, category: string) {
-    return this.transactionsRepository.updateOne(
-      { id: transactionId },
-      { category }
-    );
+  async categorizeTransaction(_id: string, category: string) {
+    return this.transactionsRepository.updateOne({ _id }, { category });
   }
 
   async upsertTransactions(transactions: Transaction[]) {
+    if (transactions.length === 0) {
+      return;
+    }
     const bulkOperation =
       this.transactionsRepository.collection.initializeUnorderedBulkOp();
     transactions.forEach((transaction) => {
       const {
-        id,
+        accountId,
+        date,
+        amount,
+        payee,
         category: _category,
         reconciled: _reconciled,
         ...rest
       } = transaction;
       bulkOperation
-        .find({ id: id, reconciled: false })
+        .find({ accountId, date, amount, payee, reconciled: false })
         .upsert()
         .updateOne({
           $set: { ...rest },

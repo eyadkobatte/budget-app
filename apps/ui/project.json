@@ -19,7 +19,9 @@
         "assets": ["apps/ui/src/favicon.ico", "apps/ui/src/assets"],
         "styles": [
           "@angular/material/prebuilt-themes/indigo-pink.css",
-          "apps/ui/src/styles.scss"
+          "apps/ui/src/styles.scss",
+          "primeng/resources/themes/aura-dark-purple/theme.css",
+          "primeng/resources/primeng.min.css"
         ],
         "scripts": [],
         "server": "apps/ui/src/main.server.ts",

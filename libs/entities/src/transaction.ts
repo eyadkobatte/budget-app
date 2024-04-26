@@ -1,4 +1,5 @@
 export class Transaction {
+  _id?: string;
   id!: string;
   accountId!: string;
   date!: Date;

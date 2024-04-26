@@ -1,18 +1,17 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Transaction } from '@entities/transaction';
-import { Subject, takeUntil } from 'rxjs';
+import { Subject, switchMap, takeUntil } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 import { DataService } from '../data/data.service';
 import { CategoryGroup } from '@entities/category';
 import { AutocompleteComponent } from '../components/autocomplete/autocomplete.component';
-import { TableModule } from 'primeng/table';
 import { SelectItemGroup } from 'primeng/api';
 
 @Component({
   selector: 'app-transactions-list',
   standalone: true,
-  imports: [CommonModule, AutocompleteComponent, TableModule],
+  imports: [CommonModule, AutocompleteComponent],
   templateUrl: './transactions-list.component.html',
   styleUrl: './transactions-list.component.scss',
 })
@@ -73,12 +72,13 @@ export class TransactionsListComponent implements OnInit, OnDestroy {
     return otherTransactionId;
   }
 
-  categorySelected(transactionId: string, category: string) {
+  categorySelected(_id: string, category: string) {
     if (category === 'Mark as Transfer') {
-      this.findTransactionPair(transactionId);
+      this.findTransactionPair(_id);
     } else {
       this.dataService
-        .categorizeTransaction(transactionId, category)
+        .categorizeTransaction(_id, category)
+        .pipe(takeUntil(this.destroy$))
         .subscribe({
           next: (value) => {
             console.log(value);
@@ -88,5 +88,24 @@ export class TransactionsListComponent implements OnInit, OnDestroy {
           },
         });
     }
+  }
+
+  syncAccounts() {
+    this.dataService
+      .syncAccounts()
+      .pipe(
+        takeUntil(this.destroy$),
+        switchMap((value) => {
+          console.log(value);
+          return this.dataService.getTransactions(
+            this.dataService.startDate$.value
+          );
+        })
+      )
+      .subscribe({
+        next: (value) => {
+          this.transactions = value;
+        },
+      });
   }
 }

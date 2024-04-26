@@ -23,7 +23,7 @@ export class TransactionsController {
     @Body() categorizeTransactionsDto: CategorizeTransactionDto
   ) {
     return this.transactionsService.categorizeTransaction(
-      categorizeTransactionsDto.transactionId,
+      categorizeTransactionsDto._id,
       categorizeTransactionsDto.category
     );
   }

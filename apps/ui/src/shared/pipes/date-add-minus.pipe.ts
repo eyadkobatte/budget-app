@@ -8,7 +8,10 @@ export class DateAddMinusPipe implements PipeTransform {
   transform(dateString: Date, days: number): Date {
     const date = DateTime.fromJSDate(dateString);
     if (!date.isValid) {
-      throw new Error('Invalid date passed.');
+      console.log(dateString, date);
+      throw new Error(
+        `Invalid date passed; Type: ${typeof dateString}, Value: ${dateString}`
+      );
     }
     const calculatedDate = date.plus({ days: days });
     return calculatedDate.toJSDate();

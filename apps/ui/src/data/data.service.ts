@@ -27,10 +27,13 @@ export class DataService {
       .get<Requisition[]>(`${this.baseUrl}/api/v1/requisitions`)
       .pipe(
         map((requisitions) =>
-          requisitions.map((requisition) => ({
-            ...requisition,
-            created: DateTime.fromISO(requisition.created as any).toJSDate(),
-          }))
+          requisitions.map((requisition) => {
+            console.log(requisition.name, requisition.created);
+            return {
+              ...requisition,
+              created: DateTime.fromISO(requisition.created as any).toJSDate(),
+            };
+          })
         )
       );
   }
@@ -61,13 +64,14 @@ export class DataService {
     });
   }
 
-  categorizeTransaction(transactionId: string, category: string) {
-    return this.http.put(
-      `http://localhost:3000/api/v1/transactions/categorize/`,
-      {
-        transactionId,
-        category,
-      }
-    );
+  categorizeTransaction(_id: string, category: string) {
+    return this.http.put(`${this.baseUrl}/api/v1/transactions/categorize/`, {
+      _id,
+      category,
+    });
+  }
+
+  syncAccounts() {
+    return this.http.get(`${this.baseUrl}/api/v1/accounts/sync`);
   }
 }

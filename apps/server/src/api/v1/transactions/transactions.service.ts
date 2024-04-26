@@ -13,9 +13,9 @@ export class TransactionsService {
     );
   }
 
-  categorizeTransaction(transactionId: string, category: string) {
+  categorizeTransaction(_id: string, category: string) {
     return this.transactionsRepositoryService.categorizeTransaction(
-      transactionId,
+      _id,
       category
     );
   }

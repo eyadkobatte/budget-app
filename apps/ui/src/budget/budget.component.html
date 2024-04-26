@@ -14,12 +14,13 @@
 </div>
 
 <div class="overflow-x-auto">
-  <table class="table table-zebra">
+  <table class="table">
     <thead>
       <tr>
         <th class="bg-neutral text-neutral-content">Category</th>
         <th class="bg-neutral text-neutral-content">Assigned</th>
-        <th class="bg-neutral text-neutral-content">Actuals</th>
+        <th class="bg-neutral text-neutral-content">Spent</th>
+        <th class="bg-neutral text-neutral-content">Left</th>
       </tr>
     </thead>
     @for (categoryGroup of categories; track categoryGroup.name) {
@@ -27,14 +28,16 @@
       <tr>
         <th>{{ categoryGroup.name }}</th>
         <td>{{ categoryGroup.total }}</td>
+        <td>{{ categoryGroup.spent }}</td>
         <td>{{ categoryGroup.left }}</td>
       </tr>
     </thead>
-    <tbody>
+    <tbody class="border-b">
       @for (category of categoryGroup.categories; track category.name) {
       <tr>
         <td>{{ category.name }}</td>
         <td>{{ category.assigned }}</td>
+        <td>{{ category.spent }}</td>
         <td>{{ category.left }}</td>
       </tr>
       }

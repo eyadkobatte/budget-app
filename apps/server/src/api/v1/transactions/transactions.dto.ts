@@ -7,7 +7,7 @@ export class GetTransactionsDto {
 
 export class CategorizeTransactionDto {
   @IsString()
-  transactionId: string;
+  _id: string;
 
   @IsString()
   category: string;

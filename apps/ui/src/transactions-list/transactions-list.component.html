@@ -1,36 +1,51 @@
-<div class="header-row">
+<div class="container">
   <h1 class="text-xl my-4">Transactions</h1>
+  <button (click)="syncAccounts()" class="btn btn-ghost btn-primary">
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="currentColor"
+      class="w-4 h-4"
+      viewBox="0 0 16 16"
+    >
+      <path
+        fill-rule="evenodd"
+        d="M13.836 2.477a.75.75 0 0 1 .75.75v3.182a.75.75 0 0 1-.75.75h-3.182a.75.75 0 0 1 0-1.5h1.37l-.84-.841a4.5 4.5 0 0 0-7.08.932.75.75 0 0 1-1.3-.75 6 6 0 0 1 9.44-1.242l.842.84V3.227a.75.75 0 0 1 .75-.75Zm-.911 7.5A.75.75 0 0 1 13.199 11a6 6 0 0 1-9.44 1.241l-.84-.84v1.371a.75.75 0 0 1-1.5 0V9.591a.75.75 0 0 1 .75-.75H5.35a.75.75 0 0 1 0 1.5H3.98l.841.841a4.5 4.5 0 0 0 7.08-.932.75.75 0 0 1 1.025-.273Z"
+        clip-rule="evenodd"
+      />
+    </svg>
+    Sync accounts
+  </button>
 </div>
-<p-table
-  class="table"
-  styleClass="p-datatable-sm p-datatable-striped"
-  [value]="transactions"
-  [tableStyle]="{ 'min-width': '50rem' }"
->
-  <ng-template pTemplate="header">
-    <tr>
-      <th>Date</th>
-      <th>Account</th>
-      <th>Payee</th>
-      <th>Category</th>
-      <th>Amount</th>
-      <th>✓</th>
-    </tr>
-  </ng-template>
-  <ng-template pTemplate="body" let-transaction>
-    <tr>
+<div class="overflow-x-auto">
+  <table class="table table-zebra">
+    <thead>
+      <tr>
+        <th>Date</th>
+        <th>Account</th>
+        <th>Payee</th>
+        <th>Category</th>
+        <th>Amount</th>
+        <th>✓</th>
+      </tr>
+    </thead>
+    @for (transaction of transactions; track $index) {
+    <tr [attr.data-transactionId]="transaction._id">
       <td>{{ transaction.date | date : 'mediumDate' }}</td>
       <td>{{ transaction.accountId }}</td>
       <td>{{ transaction.payee }}</td>
+      @if (transaction._id) {
       <td>
         <app-component-autocomplete
           [options]="categoryGroupsForAutocomplete"
           [selectedOption]="transaction.category"
-          (itemSelection)="categorySelected(transaction.id, $event)"
+          (itemSelection)="categorySelected(transaction._id, $event)"
         ></app-component-autocomplete>
       </td>
+
+      }
       <td>{{ transaction.amount }}</td>
       <td>{{ transaction.cleared }}</td>
     </tr>
-  </ng-template>
-</p-table>
+    }
+  </table>
+</div>

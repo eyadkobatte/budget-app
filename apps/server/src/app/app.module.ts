@@ -33,4 +33,10 @@ import { AuthModule } from '../auth/auth.module';
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+// implements OnApplicationBootstrap
+export class AppModule {
+  // constructor(private goCardless: GocardlessService) {}
+  // onApplicationBootstrap() {
+  //   this.goCardless.setupBank();
+  // }
+}
